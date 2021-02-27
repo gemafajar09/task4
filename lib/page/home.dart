@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task4/api/api.dart';
+import 'package:task4/login.dart';
 import 'package:task4/model/Galery.dart';
 import 'package:task4/model/Kamus.dart';
 import 'package:task4/model/Berita.dart';
@@ -21,6 +23,33 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+String nama = '';
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
+  }
+
+  void getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      nama = preferences.getString("nama");
+    });
+  }
+
+   void logOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", null);
+      preferences.setInt("id", null);
+      preferences.setInt("nama", null);
+      preferences.commit();
+      Navigator.pushReplacementNamed(
+          context, Login.router);
+    });
+  }
+
   Future<List<Gallery>> getgallery() async {
     List<Gallery> listgallery = [];
     final res = await http.get(Api.url + '/getdata.php');
@@ -263,6 +292,7 @@ class _HomeState extends State<Home> {
                           )),
                     ),
                     Container(
+                      width: MediaQuery.of(context).size.width/2,
                       child: Text(
                         "Farm App",
                         style: TextStyle(
@@ -271,6 +301,11 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ),
+                    Container(
+                      child: IconButton(icon: Icon(Icons.logout, color: Colors.white,), onPressed: (){
+                        logOut();
+                      }),
                     ),
                   ],
                 ),
