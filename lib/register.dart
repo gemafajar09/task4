@@ -28,7 +28,8 @@ class _RegisterState extends State<Register> {
   }
 
   Future<List> register() async {
-    final response = await http.post(Api.url+'login.php', body: {
+    final response = await http.post(Api.url + '/register.php', body: {
+      "nama": _nama.text,
       "username": _username.text,
       "password": _password.text,
     });
@@ -130,18 +131,18 @@ class _RegisterState extends State<Register> {
             minWidth: MediaQuery.of(context).size.width,
             padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
             onPressed: () {
-              if (_username.text.isNotEmpty) {
+              if (_username.text.isNotEmpty && _nama.text.isNotEmpty) {
                 if (_password.text.isNotEmpty) {
                   register();
                 } else {
                   showToast('Maaf Password Kosong.!');
                 }
               } else {
-                showToast('Maaf Username Kosong.!');
+                showToast('Maaf Periksa Kembali.!');
               }
             },
             child: Text(
-              'Login',
+              'Register',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 20,
@@ -160,44 +161,54 @@ class _RegisterState extends State<Register> {
         key: formKey,
         backgroundColor: Colors.green[100],
         resizeToAvoidBottomPadding: true,
-        body: SingleChildScrollView(
-          child: Column(
+        body: SafeArea(
+                  child: Stack(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 3.6,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(50),
-                      bottomRight: Radius.circular(50),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height / 3.6,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          ),
+                          image: DecorationImage(
+                              image: AssetImage('asset/background.png'),
+                              fit: BoxFit.fill),
+                          color: Colors.green,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 2,
+                              color: Colors.grey,
+                            )
+                          ]),
                     ),
-                    image: DecorationImage(
-                      image: AssetImage('asset/background.png'),
-                      fit: BoxFit.fill
-                    ),
-                    color: Colors.green,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 2,
-                        color: Colors.grey,
-                      )
-                    ]),
+                    SizedBox(height: 40),
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(15),
+                      height: MediaQuery.of(context).size.height / 2,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 2,
+                              color: Colors.grey,
+                            )
+                          ]),
+                      child: form(),
+                    )
+                  ],
+                ),
               ),
-              SizedBox(height: 40),
-              Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(15),
-                height: MediaQuery.of(context).size.height / 2.3,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 2,
-                        color: Colors.grey,
-                      )
-                    ]),
-                child: form(),
-              )
+              BackButton(color: Colors.white,
+              onPressed: (){
+                Navigator.pushReplacementNamed(context, Login.router);
+              },
+            )
             ],
           ),
         ));

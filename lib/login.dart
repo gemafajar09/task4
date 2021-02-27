@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task4/api/api.dart';
 import 'package:task4/page/splash.dart';
 import 'package:http/http.dart' as http;
+import 'package:task4/register.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -27,8 +28,8 @@ class _LoginState extends State<Login> {
     });
   }
 
-   Future<List> _login() async {
-    final response = await http.post(Api.url+'/login.php', body: {
+  Future<List> _login() async {
+    final response = await http.post(Api.url + '/login.php', body: {
       "username": _username.text,
       "password": _password.text,
     });
@@ -66,7 +67,7 @@ class _LoginState extends State<Login> {
     });
   }
 
-   @override
+  @override
   void initState() {
     super.initState();
     getPref();
@@ -159,6 +160,32 @@ class _LoginState extends State<Login> {
             ),
           ),
         ),
+        SizedBox(height: 24),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 20,
+              child: InkWell(
+                child: Text(
+                  'Belum Punya Akun?',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 5),
+              height: 20,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, Register.router);
+                },
+                child:
+                    Text("Klik Disini.", style: TextStyle(color: Colors.blue)),
+              ),
+            )
+          ],
+        )
       ],
     );
   }
@@ -169,45 +196,46 @@ class _LoginState extends State<Login> {
         key: formKey,
         backgroundColor: Colors.green[100],
         resizeToAvoidBottomPadding: true,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 3.6,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(50),
-                      bottomRight: Radius.circular(50),
-                    ),
-                    image: DecorationImage(
-                      image: AssetImage('asset/background.png'),
-                      fit: BoxFit.fill
-                    ),
-                    color: Colors.green,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 2,
-                        color: Colors.grey,
-                      )
-                    ]),
-              ),
-              SizedBox(height: 40),
-              Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(15),
-                height: MediaQuery.of(context).size.height / 2.3,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 2,
-                        color: Colors.grey,
-                      )
-                    ]),
-                child: form(),
-              )
-            ],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 3.6,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50),
+                      ),
+                      image: DecorationImage(
+                          image: AssetImage('asset/background.png'),
+                          fit: BoxFit.fill),
+                      color: Colors.green,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          color: Colors.grey,
+                        )
+                      ]),
+                ),
+                SizedBox(height: 40),
+                Container(
+                  margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(15),
+                  height: MediaQuery.of(context).size.height / 2.3,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          color: Colors.grey,
+                        )
+                      ]),
+                  child: form(),
+                )
+              ],
+            ),
           ),
         ));
   }
