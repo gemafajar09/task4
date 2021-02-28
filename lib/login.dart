@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
     String iduser = data['id'];
     if (value == 1) {
       savePref(value, nama, iduser);
-      showToast('Selamat datang.');
+      showToast('Selamat datang $nama.');
       Navigator.pushReplacementNamed(context, Splash.router);
     } else {
       _username.clear();
